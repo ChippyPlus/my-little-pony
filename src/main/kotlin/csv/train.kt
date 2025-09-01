@@ -3,11 +3,12 @@ package org.cuttlefish.csv
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import kotlinx.coroutines.runBlocking
 import org.cuttlefish.MultiLayerPerceptron
+import kotlin.time.measureTime
 
 
-private const val epochT = 5
+private const val epochT = 30
 private val mlp = MultiLayerPerceptron(
-	inputSize = 784, hiddenSize = 8, outputSize = 1, learningRate = 0.001, epochs = epochT
+	inputSize = 784, hiddenSize = 16, outputSize = 1, learningRate = 0.001, epochs = epochT
 									  )
 
 fun main() {
@@ -40,10 +41,12 @@ fun main() {
 		trainingData.add(Pair(row.value.map { it.toDouble() }, listOf(dataNumbers[row.index].toDouble())))
 	}
 
-
-	runBlocking {
-		mlp.train(trainingData, progressCallback, 1)
+	val x = measureTime {
+		runBlocking {
+			mlp.train(trainingData, progressCallback, 1)
+		}
 	}
+	println("Time = $x")
 	mlp.save("NumbersModel.json")
 
 }

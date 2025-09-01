@@ -109,10 +109,8 @@ class MultiLayerPerceptron(
 		for (epoch in 1..epochs) {
 			val batches = trainingData.chunked(batchSize)
 
-			// Asynchronously process each batch of data.
 			val deferredBatchResults = batches.map { batch ->
 				async {
-					// These accumulators are for one batch only.
 					val batchWeightsIhUpdates = Array(inputSize) { DoubleArray(hiddenSize) }
 					val batchBiasesHUpdates = DoubleArray(hiddenSize)
 					val batchWeightsHoUpdates = Array(hiddenSize) { DoubleArray(outputSize) }
