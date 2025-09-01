@@ -1,6 +1,7 @@
 package org.cuttlefish.csv
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import kotlinx.coroutines.runBlocking
 import org.cuttlefish.MultiLayerPerceptron
 
 
@@ -40,11 +41,13 @@ fun main() {
 	}
 
 
-
-	mlp.train(trainingData, progressCallback, 1)
+	runBlocking {
+		mlp.train(trainingData, progressCallback, 1)
+	}
 	mlp.save("NumbersModel.json")
 
 }
+
 private var lastElapsedTime = 0L
 private var lastTime = 0L
 private var lastAvgError = 0.0
@@ -57,19 +60,14 @@ private val progressCallback = { epoch: Int, _: Int, avgError: Double ->
 
 	println(
 		"[ E%-7d/$epochT %.5f%% ] [ A%.16f%% ] [ Time: %.5fs ] [ Error Change: %.20f ] [ E Imprv ${if (errorChange < lastErrorChange) "✅" else "❌"} ] [ Improvement ${if (avgError < lastAvgError) "✅" else "❌"} ] [ Time use ${if (avgError < lastAvgError && elapsedTime < lastElapsedTime) "✅" else "❌"} ]".format(
-			epoch,
-			epoch.toDouble() / epochT * 100,
-			avgError,
-			elapsedTime.toDouble() / 1000,
-			errorChange
-																																					  )
+			epoch, epoch.toDouble() / epochT * 100, avgError, elapsedTime.toDouble() / 1000, errorChange
+																																																																													 )
 		   )
 	lastElapsedTime = elapsedTime
 	lastTime = currentTime
 	lastAvgError = avgError
 	lastErrorChange = errorChange
 }
-
 
 
 // start 20.2432061955366580%

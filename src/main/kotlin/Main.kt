@@ -4,7 +4,7 @@ import java.io.File
 import kotlinx.serialization.json.Json
 import kotlin.math.roundToInt
 
- fun main() {
+ suspend fun main() {
 
     val configFileName = "config.json"
 

@@ -1,5 +1,6 @@
 package org.cuttlefish
 
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import java.io.File
 
@@ -52,8 +53,9 @@ fun main() {
 									)
 
 	println("Starting training...")
-	myMLP.train(trainingDataList, null)
-
+	runBlocking {
+		myMLP.train(trainingDataList, null)
+	}
 	myMLP.save(modelFileName)
 	println("Model saved to $modelFileName")
 }
